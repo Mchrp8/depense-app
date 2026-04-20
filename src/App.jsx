@@ -60,6 +60,9 @@ export default function App() {
   const [activeTab, setActiveTab] = useState("current");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("Bouffe");
+  const [selectedDate, setSelectedDate] = useState(
+  new Date().toISOString().split("T")[0]
+);
 
   const [data, setData] = useState(() => {
     const saved = localStorage.getItem("budget_data_v1");
@@ -106,7 +109,7 @@ export default function App() {
       id: Date.now(),
       amount: numericAmount,
       category,
-      createdAt: new Date().toISOString(),
+      createdAt: new Date(selectedDate).toISOString(),
     };
 
     setData((prev) => ({
@@ -115,6 +118,8 @@ export default function App() {
     }));
 
     setAmount("");
+
+    setSelectedDate(new Date().toISOString().split("T")[0]);
   };
 
   const removeExpense = (id) => {
@@ -212,12 +217,19 @@ export default function App() {
           >
             <button
               onClick={() => setActiveTab("current")}
+              onTouchStart={(e) => {
+  e.currentTarget.style.transform = "scale(0.95)";
+}}
+onTouchEnd={(e) => {
+  e.currentTarget.style.transform = "scale(1)";
+}}
               style={{
                 flex: 1,
                 border: "none",
                 borderRadius: 12,
                 padding: "12px 10px",
                 background: activeTab === "current" ? "#18181b" : "transparent",
+                transition: "transform 0.15s ease",
                 color: activeTab === "current" ? "#fff" : "#555",
                 fontWeight: 600,
                 fontSize: 14,
@@ -229,12 +241,19 @@ export default function App() {
 
             <button
               onClick={() => setActiveTab("history")}
+              onTouchStart={(e) => {
+  e.currentTarget.style.transform = "scale(0.95)";
+}}
+onTouchEnd={(e) => {
+  e.currentTarget.style.transform = "scale(1)";
+}}
               style={{
                 flex: 1,
                 border: "none",
                 borderRadius: 12,
                 padding: "12px 10px",
                 background: activeTab === "history" ? "#18181b" : "transparent",
+                transition: "transform 0.15s ease",
                 color: activeTab === "history" ? "#fff" : "#555",
                 fontWeight: 600,
                 fontSize: 14,
@@ -302,33 +321,64 @@ export default function App() {
               >
                 <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                   <input
-                    type="number"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    placeholder="Montant (€)"
-                    style={{
-                      width: "100%",
-                      padding: 15,
-                      borderRadius: 14,
-                      border: "1px solid #dddfe6",
-                      fontSize: 16,
-                      boxSizing: "border-box",
-                      outline: "none",
-                    }}
-                  />
+                type="number"
+                inputMode="decimal"
+                step="0.01"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="Montant (€)"
+                style={{
+                  width: "100%",
+                  padding: "16px 18px",
+                  borderRadius: 18,
+                  border: "1px solid #e5e7eb",
+                  fontSize: 17,
+                  fontWeight: 600,
+                  boxSizing: "border-box",
+                  outline: "none",
+                  background: "#ffffff",
+                  color: "#18181b",
+                  boxShadow: "0 4px 14px rgba(0,0,0,0.04)",
+  }}
+/>
+
+<input
+  type="date"
+  value={selectedDate}
+  onChange={(e) => setSelectedDate(e.target.value)}
+  style={{
+    width: "100%",
+    padding: "16px 18px",
+    borderRadius: 18,
+    border: "1px solid #e5e7eb",
+    fontSize: 17,
+    fontWeight: 600,
+    boxSizing: "border-box",
+    outline: "none",
+    background: "#ffffff",
+    color: "#374151",
+    marginTop: 10,
+    boxShadow: "0 4px 12px rgba(0,0,0,0.03)",
+  }}
+/>
 
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
                     style={{
                       width: "100%",
-                      padding: 15,
-                      borderRadius: 14,
-                      border: "1px solid #dddfe6",
-                      fontSize: 16,
-                      background: "#fff",
+                      padding: "12px 14px",
+                      borderRadius: 12,
+                      border: "1px solid #e5e7eb",
+                      fontSize: 15,
+                      fontWeight: 600,
                       boxSizing: "border-box",
                       outline: "none",
+                      background: "#ffffff",
+                      color: "#2563eb",
+                      marginTop: 2,
+                      boxShadow: "0 4px 14px rgba(0,0,0,0.04)",
+                      appearance: "none",
                     }}
                   >
                     <option>Bouffe</option>
@@ -339,6 +389,13 @@ export default function App() {
 
                   <button
   onClick={addExpense}
+  onTouchStart={(e) => {
+  e.currentTarget.style.transform = "scale(0.95)";
+}}
+onTouchEnd={(e) => {
+  e.currentTarget.style.transform = "scale(1)";
+}}
+  disabled={!amount.trim()}
   onMouseDown={(e) => {
     e.currentTarget.style.transform = "scale(0.97)";
   }}
@@ -349,6 +406,7 @@ export default function App() {
     width: "100%",
     padding: 15,
     borderRadius: 16,
+    transition: "transform 0.15s ease",
     border: "none",
     background: "linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%)",
     color: "#fff",
@@ -356,6 +414,7 @@ export default function App() {
     fontWeight: 700,
     cursor: "pointer",
     boxShadow: "0 10px 20px rgba(124,58,237,0.25)",
+    opacity: amount.trim() ? 1 : 0.5,
     transition: "transform 0.1s ease, box-shadow 0.1s ease"
   }}
 >
@@ -461,10 +520,12 @@ export default function App() {
                       color: "#7a7f8c",
                     }}
                   >
-                    Aucune dépense pour ce mois ✨
+                    Commence par ajouter ta première dépense ✨
                   </div>
                 ) : (
-                  data.currentExpenses.map((item) => (
+                  [...data.currentExpenses]
+  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+  .map((item) => (
                     <div
   key={item.id}
   onTouchStart={(e) => {

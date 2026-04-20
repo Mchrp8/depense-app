@@ -1,0 +1,11 @@
+    Mise a jour
+{
+git add .
+git commit -m "update"
+git push
+}
+
+    Lancement
+{
+npm run dev
+}
