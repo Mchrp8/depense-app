@@ -59,7 +59,18 @@ export default function App() {
 
   const [activeTab, setActiveTab] = useState("current");
   const [amount, setAmount] = useState("");
+  const [showSettings, setShowSettings] = useState(false);
   const [category, setCategory] = useState("Bouffe");
+  
+  const [categories, setCategories] = useState(() => {
+  const saved = localStorage.getItem("categories");
+  if (saved) return JSON.parse(saved);
+
+  return ["Bouffe", "Transport", "Loisirs", "Autres"];
+});
+const [newCategory, setNewCategory] = useState("");
+
+
   const [selectedDate, setSelectedDate] = useState(
   new Date().toISOString().split("T")[0]
 );
@@ -98,6 +109,10 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem("budget_data_v1", JSON.stringify(data));
   }, [data]);
+
+  useEffect(() => {
+  localStorage.setItem("categories", JSON.stringify(categories));
+}, [categories]);
 
   const addExpense = () => {
     if (!amount.trim()) return;
@@ -183,16 +198,204 @@ export default function App() {
               Mon budget
             </div>
 
-            <h1
-              style={{
-                margin: 0,
-                fontSize: 30,
-                color: "#18181b",
-                lineHeight: 1.1,
-              }}
-            >
-              💰 Budget mensuel
-            </h1>
+            <div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "auto 1fr auto",
+    alignItems: "center",
+    marginBottom: 4,
+  }}
+>
+  <div></div>
+
+  <h1
+    style={{
+      margin: 0,
+      fontSize: 30,
+      color: "#18181b",
+      lineHeight: 1.1,
+      textAlign: "center",
+      whiteSpace: "nowrap",
+    }}
+  >
+    💰 Budget mensuel
+  </h1>
+
+  <button
+    onClick={() => setShowSettings(!showSettings)}
+    style={{
+      border: "none",
+      background: "#f3f4f8",
+      borderRadius: 12,
+      padding: "8px 10px",
+      cursor: "pointer",
+      fontSize: 18,
+      width: 44,
+      height: 44,
+      justifySelf: "end",
+    }}
+  >
+    ⚙️
+  </button>
+</div>
+{showSettings && (
+  <div
+    style={{
+      marginTop: 12,
+      marginBottom: 18,
+      background: "rgba(255,255,255,0.9)",
+      backdropFilter: "blur(12px)",
+      WebkitBackdropFilter: "blur(12px)",
+      borderRadius: 20,
+      padding: 14,
+      border: "1px solid rgba(255,255,255,0.7)",
+      boxShadow: "0 10px 30px rgba(31,31,31,0.08)",
+    }}
+  >
+    <div
+      style={{
+        fontSize: 14,
+        fontWeight: 700,
+        color: "#18181b",
+        marginBottom: 10,
+      }}
+    >
+      Réglages
+    </div>
+
+    <div
+      style={{
+        fontSize: 13,
+        color: "#6b7280",
+      }}
+    >
+      <>
+  <input
+    type="text"
+    value={newCategory}
+    onChange={(e) => setNewCategory(e.target.value)}
+    placeholder="Nouvelle catégorie"
+    onFocus={(e) => {
+      e.target.style.border = "1px solid #7c3aed";
+      e.target.style.boxShadow = "0 0 0 3px rgba(124,58,237,0.15)";
+    }}
+    onBlur={(e) => {
+      e.target.style.border = "1px solid #ddd6fe";
+      e.target.style.boxShadow = "0 4px 12px rgba(124,58,237,0.06)";
+    }}
+    style={{
+      width: "100%",
+      padding: "10px 12px",
+      borderRadius: 12,
+      border: "1px solid #ddd6fe",
+      fontSize: 14,
+      fontWeight: 500,
+      boxSizing: "border-box",
+      outline: "none",
+      background: "#ffffff",
+      color: "#18181b",
+      boxShadow: "0 4px 12px rgba(124,58,237,0.06)",
+      transition: "border-color 0.2s ease, box-shadow 0.2s ease",
+      marginTop: 6,
+    }}
+  />
+
+  <button
+    onClick={() => {
+      if (!newCategory.trim()) return;
+
+      if (!categories.includes(newCategory)) {
+        setCategories([...categories, newCategory]);
+      }
+
+      setCategory(newCategory);
+      setNewCategory("");
+      setShowSettings(false);
+    }}
+    onTouchStart={(e) => {
+      e.currentTarget.style.transform = "scale(0.97)";
+    }}
+    onTouchEnd={(e) => {
+      e.currentTarget.style.transform = "scale(1)";
+    }}
+    style={{
+      width: "100%",
+      padding: "12px 14px",
+      borderRadius: 14,
+      border: "1px solid #ddd6fe",
+      background: "#f5f3ff",
+      color: "#5b21b6",
+      fontSize: 14,
+      fontWeight: 700,
+      cursor: "pointer",
+      marginTop: 6,
+      boxShadow: "0 4px 12px rgba(124,58,237,0.08)",
+      transition: "transform 0.1s ease, box-shadow 0.1s ease",
+      WebkitTapHighlightColor: "transparent",
+      outline: "none",
+    }}
+  >
+    Valider
+  </button>
+  <div style={{ marginTop: 12 }}>
+  <div
+    style={{
+      fontSize: 13,
+      fontWeight: 700,
+      color: "#6b7280",
+      marginBottom: 8,
+    }}
+  >
+    Catégories existantes
+  </div>
+
+  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+    {categories.map((item) => (
+      <div
+        key={item}
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 6,
+          padding: "8px 10px",
+          borderRadius: 999,
+          background: "#f5f3ff",
+          color: "#5b21b6",
+          fontSize: 13,
+          fontWeight: 600,
+        }}
+      >
+        <span>{item}</span>
+
+        <button
+          onClick={() => {
+            const updated = categories.filter((cat) => cat !== item);
+            setCategories(updated);
+
+            if (category === item && updated.length > 0) {
+              setCategory(updated[0]);
+            }
+          }}
+          style={{
+            border: "none",
+            background: "transparent",
+            color: "#7c3aed",
+            cursor: "pointer",
+            fontSize: 12,
+            fontWeight: 700,
+            padding: 0,
+          }}
+        >
+          ✕
+        </button>
+      </div>
+    ))}
+  </div>
+</div>
+</>
+    </div>
+  </div>
+)}
 
             <p
               style={{
@@ -318,11 +521,11 @@ onTouchEnd={(e) => {
                 style={{
                   background: "#f8f8fc",
                   borderRadius: 20,
-                  padding: 14,
+                  padding: 18,
                   marginBottom: 18,
                 }}
               >
-                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                   <input
                 type="number"
                 inputMode="decimal"
@@ -330,27 +533,47 @@ onTouchEnd={(e) => {
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="Montant (€)"
+                onFocus={(e) => {
+  e.target.style.border = "1px solid #7c3aed";
+  e.target.style.boxShadow = "0 0 0 3px rgba(124,58,237,0.15)";
+}}
+onBlur={(e) => {
+  e.target.style.border = "1px solid #ddd6fe";
+  e.target.style.boxShadow = "0 6px 18px rgba(124,58,237,0.08)";
+}}
                 style={{
-                  width: "100%",
-                  padding: "16px 18px",
-                  borderRadius: 18,
-                  border: "1px solid #e5e7eb",
-                  fontSize: 17,
-                  fontWeight: 600,
-                  boxSizing: "border-box",
-                  outline: "none",
-                  background: "#ffffff",
-                  color: "#18181b",
-                  boxShadow: "0 4px 14px rgba(0,0,0,0.04)",
-  }}
+                width: "100%",
+                padding: "16px 18px",
+                borderRadius: 18,
+                border: "1px solid #ddd6fe",
+                fontSize: 17,
+                fontWeight: 600,
+                boxSizing: "border-box",
+                outline: "none",
+                background: "#ffffff",
+                color: "#18181b",
+                boxShadow: "0 6px 18px rgba(124,58,237,0.08)",
+                transition: "border-color 0.2s ease, box-shadow 0.2s ease",
+}}
 />
 
 <input
   type="date"
+  onFocus={(e) => {
+  e.target.style.border = "1px solid #7c3aed";
+  e.target.style.boxShadow = "0 0 0 3px rgba(124,58,237,0.15)";
+}}
+onBlur={(e) => {
+  e.target.style.border = "1px solid #ddd6fe";
+  e.target.style.boxShadow = "0 6px 18px rgba(124,58,237,0.08)";
+}}
   value={selectedDate}
   onChange={(e) => setSelectedDate(e.target.value)}
   style={{
     width: "100%",
+    border: "1px solid #ddd6fe",
+boxShadow: "0 6px 18px rgba(124,58,237,0.08)",
+transition: "border-color 0.2s ease, box-shadow 0.2s ease",
     padding: "16px 18px",
     borderRadius: 18,
     border: "1px solid #e5e7eb",
@@ -368,6 +591,14 @@ onTouchEnd={(e) => {
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
+                    onFocus={(e) => {
+  e.target.style.border = "1px solid #7c3aed";
+  e.target.style.boxShadow = "0 0 0 3px rgba(124,58,237,0.15)";
+}}
+onBlur={(e) => {
+  e.target.style.border = "1px solid #ddd6fe";
+  e.target.style.boxShadow = "0 6px 18px rgba(124,58,237,0.08)";
+}}
                     style={{
                       width: "100%",
                       padding: "12px 14px",
@@ -377,6 +608,9 @@ onTouchEnd={(e) => {
                       fontWeight: 600,
                       boxSizing: "border-box",
                       outline: "none",
+                      border: "1px solid #ddd6fe",
+                      boxShadow: "0 6px 18px rgba(124,58,237,0.08)",
+                      transition: "border-color 0.2s ease, box-shadow 0.2s ease",
                       background: "#ffffff",
                       color: "#2563eb",
                       marginTop: 2,
@@ -384,11 +618,18 @@ onTouchEnd={(e) => {
                       appearance: "none",
                     }}
                   >
-                    <option>Bouffe</option>
-                    <option>Transport</option>
-                    <option>Loisirs</option>
-                    <option>Autres</option>
+                    {categories.map((item) => (
+  <option key={item}>{item}</option>
+))}
                   </select>
+                  
+                  
+  <>
+    
+
+    
+  </>
+
 
                   <button
   onClick={addExpense}
@@ -538,23 +779,28 @@ onTouchEnd={(e) => {
     e.currentTarget.style.transform = "scale(1)";
   }}
   style={{
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    background: "rgba(255,255,255,0.6)",
-    borderRadius: 20,
-    padding: 16,
-    marginBottom: 10,
-    transition: "transform 0.15s ease",
-  }}
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  background: "rgba(255,255,255,0.72)",
+  backdropFilter: "blur(14px)",
+  WebkitBackdropFilter: "blur(14px)",
+  borderRadius: 22,
+  padding: 16,
+  marginBottom: 12,
+  transition: "transform 0.15s ease, box-shadow 0.2s ease",
+  border: "1px solid rgba(255,255,255,0.7)",
+  boxShadow: "0 10px 30px rgba(31, 31, 31, 0.06)",
+}}
 >
                       <div>
                         <div
                           style={{
-                            fontSize: 17,
-                            fontWeight: 700,
-                            color: "#18181b",
-                          }}
+  fontSize: 19,
+  fontWeight: 800,
+  color: "#111827",
+  letterSpacing: "-0.3px",
+}}
                         >
                           {item.amount.toFixed(2)} €
                         </div>
@@ -590,16 +836,24 @@ onTouchEnd={(e) => {
 
                       <button
                         onClick={() => removeExpense(item.id)}
+                        onTouchStart={(e) => {
+  e.currentTarget.style.transform = "scale(0.95)";
+}}
+onTouchEnd={(e) => {
+  e.currentTarget.style.transform = "scale(1)";
+}}
                         style={{
-                          border: "none",
-                          background: "#fff",
-                          borderRadius: 12,
-                          padding: "10px 12px",
-                          cursor: "pointer",
-                          fontSize: 13,
-                          fontWeight: 600,
-                          color: "#333",
-                        }}
+  border: "none",
+  background: "rgba(255,255,255,0.85)",
+  borderRadius: 14,
+  padding: "10px 14px",
+  cursor: "pointer",
+  fontSize: 12,
+  fontWeight: 700,
+  color: "#6b7280",
+  boxShadow: "0 6px 16px rgba(0,0,0,0.05)",
+  transition: "transform 0.15s ease, background 0.2s ease",
+}}
                       >
                         Supprimer
                       </button>
