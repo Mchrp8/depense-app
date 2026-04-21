@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
 
+
+  if (typeof window !== "undefined" && window.location.search.includes("reset")) {
+  localStorage.clear();
+}
+
 function getMonthKey(date = new Date()) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -75,6 +80,7 @@ export default function App() {
   const currentMonthKey = getMonthKey();
 
   const [activeTab, setActiveTab] = useState("current");
+  const [darkMode, setDarkMode] = useState(false);
   const [amount, setAmount] = useState("");
   const [showSettings, setShowSettings] = useState(false);
   const [category, setCategory] = useState("Bouffe");
@@ -188,8 +194,9 @@ const [selectedColor, setSelectedColor] = useState("#f97316");
     <div
       style={{
         minHeight: "100vh",
-        background:
-          "linear-gradient(180deg, #f7f2ff 0%, #f5f7fb 45%, #eef2f7 100%)",
+        background: darkMode
+  ? "linear-gradient(180deg, #0f0f12 0%, #18181b 100%)"
+  : "linear-gradient(180deg, #f7f2ff 0%, #f5f7fb 45%, #eef2f7 100%)",
         padding: 16,
         fontFamily:
           "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
@@ -203,7 +210,13 @@ const [selectedColor, setSelectedColor] = useState("#f97316");
       >
         <div
           style={{
-            background: "rgba(255,255,255,0.88)",
+            background: darkMode
+            ? "rgba(24,24,27,0.9)"
+            : "rgba(255,255,255,0.88)",
+            color: darkMode ? "#f4f4f5" : "#18181b",
+            border: darkMode
+          ? "1px solid rgba(255,255,255,0.05)"
+          : "1px solid rgba(255,255,255,0.7)",
             backdropFilter: "blur(10px)",
             borderRadius: 28,
             padding: 20,
@@ -261,6 +274,9 @@ const [selectedColor, setSelectedColor] = useState("#f97316");
   >
     ⚙️
   </button>
+
+  
+
 </div>
 {showSettings && (
   <div
@@ -296,6 +312,43 @@ const [selectedColor, setSelectedColor] = useState("#f97316");
     >
       Gère tes catégories et leurs couleurs
     </div>
+    <div
+  style={{
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 12,
+    padding: "10px 12px",
+    borderRadius: 14,
+    background: "#f8f8fc",
+  }}
+>
+  <div
+    style={{
+      fontSize: 14,
+      fontWeight: 600,
+      color: "#18181b",
+    }}
+  >
+    Mode sombre
+  </div>
+
+  <button
+    onClick={() => setDarkMode(!darkMode)}
+    style={{
+      border: "none",
+      background: darkMode ? "#18181b" : "#ede9fe",
+      color: darkMode ? "#fff" : "#5b21b6",
+      borderRadius: 999,
+      padding: "8px 12px",
+      fontSize: 13,
+      fontWeight: 700,
+      cursor: "pointer",
+    }}
+  >
+    {darkMode ? "☀️ Clair" : "🌙 Sombre"}
+  </button>
+</div>
 
     <input
       type="text"
@@ -461,6 +514,29 @@ const [selectedColor, setSelectedColor] = useState("#f97316");
       >
         Catégories existantes
       </div>
+
+        <button
+  onClick={() => {
+    if (confirm("Supprimer toutes les données ?")) {
+      localStorage.clear();
+      window.location.reload();
+    }
+  }}
+  style={{
+    width: "100%",
+    padding: "12px 14px",
+    borderRadius: 14,
+    border: "none",
+    background: "#ef4444",
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: 700,
+    cursor: "pointer",
+    marginTop: 12,
+  }}
+>
+  🔄 Reset l'app
+</button>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
         {categories.map((item) => {
@@ -1169,7 +1245,7 @@ onTouchEnd={(e) => {
                             </strong>
                           </div>
                         ))}
-                        
+              
                       </div>
                     </div>
                   );
@@ -1179,6 +1255,7 @@ onTouchEnd={(e) => {
           )}
         </div>
       </div>
+      
       <div
   style={{
     marginTop: 20,
