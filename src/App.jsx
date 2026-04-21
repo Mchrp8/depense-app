@@ -30,6 +30,23 @@ function getCategoryMeta(category) {
   }
 }
 
+function getCategoryStyle(category, categories) {
+  const found = categories.find((item) => {
+    if (typeof item === "string") return item === category;
+    return item.name === category;
+  });
+
+  if (found && typeof found !== "string") {
+    return {
+      emoji: "🏷️",
+      bg: `${found.color}22`,
+      color: found.color,
+    };
+  }
+
+  return getCategoryMeta(category);
+}
+
 function getCategoryEmoji(category) {
   return getCategoryMeta(category).emoji;
 }
@@ -61,14 +78,21 @@ export default function App() {
   const [amount, setAmount] = useState("");
   const [showSettings, setShowSettings] = useState(false);
   const [category, setCategory] = useState("Bouffe");
+  const [selectedFilter, setSelectedFilter] = useState("Toutes");
   
   const [categories, setCategories] = useState(() => {
   const saved = localStorage.getItem("categories");
   if (saved) return JSON.parse(saved);
 
-  return ["Bouffe", "Transport", "Loisirs", "Autres"];
+  return [
+  { name: "Bouffe", color: "#f97316" },
+  { name: "Transport", color: "#3b82f6" },
+  { name: "Loisirs", color: "#a855f7" },
+  { name: "Autres", color: "#6b7280" },
+];
 });
 const [newCategory, setNewCategory] = useState("");
+const [selectedColor, setSelectedColor] = useState("#f97316");
 
 
   const [selectedDate, setSelectedDate] = useState(
@@ -254,10 +278,10 @@ const [newCategory, setNewCategory] = useState("");
   >
     <div
       style={{
-        fontSize: 14,
-        fontWeight: 700,
+        fontSize: 15,
+        fontWeight: 800,
         color: "#18181b",
-        marginBottom: 10,
+        marginBottom: 4,
       }}
     >
       Réglages
@@ -267,132 +291,265 @@ const [newCategory, setNewCategory] = useState("");
       style={{
         fontSize: 13,
         color: "#6b7280",
+        marginBottom: 12,
       }}
     >
-      <>
-  <input
-    type="text"
-    value={newCategory}
-    onChange={(e) => setNewCategory(e.target.value)}
-    placeholder="Nouvelle catégorie"
-    onFocus={(e) => {
-      e.target.style.border = "1px solid #7c3aed";
-      e.target.style.boxShadow = "0 0 0 3px rgba(124,58,237,0.15)";
-    }}
-    onBlur={(e) => {
-      e.target.style.border = "1px solid #ddd6fe";
-      e.target.style.boxShadow = "0 4px 12px rgba(124,58,237,0.06)";
-    }}
+      Gère tes catégories et leurs couleurs
+    </div>
+
+    <input
+      type="text"
+      value={newCategory}
+      onChange={(e) => setNewCategory(e.target.value)}
+      placeholder="Nouvelle catégorie"
+      onFocus={(e) => {
+        e.target.style.border = "1px solid #7c3aed";
+        e.target.style.boxShadow = "0 0 0 3px rgba(124,58,237,0.15)";
+      }}
+      onBlur={(e) => {
+        e.target.style.border = "1px solid #ddd6fe";
+        e.target.style.boxShadow = "0 4px 12px rgba(124,58,237,0.06)";
+      }}
+      style={{
+        width: "100%",
+        padding: "10px 12px",
+        borderRadius: 12,
+        border: "1px solid #ddd6fe",
+        fontSize: 14,
+        fontWeight: 500,
+        boxSizing: "border-box",
+        outline: "none",
+        background: "#ffffff",
+        color: "#18181b",
+        boxShadow: "0 4px 12px rgba(124,58,237,0.06)",
+        transition: "border-color 0.2s ease, box-shadow 0.2s ease",
+        marginTop: 6,
+      }}
+    />
+
+    <div style={{ display: "flex", gap: 8, marginTop: 8, flexWrap: "wrap" }}>
+      
+  
+  <div
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: 10,
+    marginTop: 8,
+  }}
+>
+  <label
+    htmlFor="customColorPicker"
     style={{
-      width: "100%",
+      flex: 1,
       padding: "10px 12px",
       borderRadius: 12,
-      border: "1px solid #ddd6fe",
-      fontSize: 14,
-      fontWeight: 500,
+      border: "1px dashed #c4b5fd",
+      background: "#faf9ff",
+      color: "#6d28d9",
+      fontSize: 13,
+      fontWeight: 600,
+      cursor: "pointer",
+      textAlign: "center",
       boxSizing: "border-box",
-      outline: "none",
-      background: "#ffffff",
-      color: "#18181b",
-      boxShadow: "0 4px 12px rgba(124,58,237,0.06)",
-      transition: "border-color 0.2s ease, box-shadow 0.2s ease",
-      marginTop: 6,
+    }}
+  >
+    🎨 Couleur personnalisée
+  </label>
+
+  <input
+    id="customColorPicker"
+    type="color"
+    value={selectedColor}
+    onChange={(e) => setSelectedColor(e.target.value)}
+    style={{
+      width: 42,
+      height: 42,
+      padding: 0,
+      border: "none",
+      background: "transparent",
+      cursor: "pointer",
+      flexShrink: 0,
     }}
   />
+</div>
 
-  <button
-    onClick={() => {
-      if (!newCategory.trim()) return;
+<input
+  id="customColorPicker"
+  type="color"
+  value={selectedColor}
+  onChange={(e) => setSelectedColor(e.target.value)}
+  style={{ display: "none" }}
+/>
+      {["#f97316", "#3b82f6", "#a855f7", "#10b981", "#ef4444"].map((color) => (
+        <div
+          key={color}
+          onClick={() => setSelectedColor(color)}
+          style={{
+  width: selectedColor === color ? 28 : 24,
+  height: selectedColor === color ? 28 : 24,
+  flexShrink: 0,
+  borderRadius: "50%",
+  background: color,
+  cursor: "pointer",
+  border: selectedColor === color ? "3px solid #18181b" : "2px solid #fff",
+  boxShadow:
+    selectedColor === color
+      ? "0 0 0 3px rgba(24,24,27,0.08)"
+      : "0 4px 10px rgba(0,0,0,0.08)",
+  transition: "all 0.15s ease",
+}}
+        />
+      ))}
+    </div>
 
-      if (!categories.includes(newCategory)) {
-        setCategories([...categories, newCategory]);
-      }
+    <button
+      onClick={() => {
+        if (!newCategory.trim()) return;
 
-      setCategory(newCategory);
-      setNewCategory("");
-      setShowSettings(false);
-    }}
-    onTouchStart={(e) => {
-      e.currentTarget.style.transform = "scale(0.97)";
-    }}
-    onTouchEnd={(e) => {
-      e.currentTarget.style.transform = "scale(1)";
-    }}
-    style={{
-      width: "100%",
-      padding: "12px 14px",
-      borderRadius: 14,
-      border: "1px solid #ddd6fe",
-      background: "#f5f3ff",
-      color: "#5b21b6",
-      fontSize: 14,
-      fontWeight: 700,
-      cursor: "pointer",
-      marginTop: 6,
-      boxShadow: "0 4px 12px rgba(124,58,237,0.08)",
-      transition: "transform 0.1s ease, box-shadow 0.1s ease",
-      WebkitTapHighlightColor: "transparent",
-      outline: "none",
-    }}
-  >
-    Valider
-  </button>
-  <div style={{ marginTop: 12 }}>
-  <div
-    style={{
-      fontSize: 13,
-      fontWeight: 700,
-      color: "#6b7280",
-      marginBottom: 8,
-    }}
-  >
-    Catégories existantes
-  </div>
+        const exists = categories.some((item) => {
+          const name = typeof item === "string" ? item : item.name;
+          return name.toLowerCase() === newCategory.trim().toLowerCase();
+        });
 
-  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-    {categories.map((item) => (
+        if (!exists) {
+          setCategories([
+            ...categories,
+            { name: newCategory.trim(), color: selectedColor },
+          ]);
+        }
+
+        setCategory(newCategory.trim());
+        setNewCategory("");
+        setSelectedColor("#f97316");
+        setShowSettings(false);
+      }}
+      onTouchStart={(e) => {
+        e.currentTarget.style.transform = "scale(0.97)";
+      }}
+      onTouchEnd={(e) => {
+        e.currentTarget.style.transform = "scale(1)";
+      }}
+      style={{
+        width: "100%",
+        padding: "12px 14px",
+        borderRadius: 14,
+        border: "1px solid #ddd6fe",
+        background: "#f5f3ff",
+        color: "#5b21b6",
+        fontSize: 14,
+        fontWeight: 700,
+        cursor: "pointer",
+        marginTop: 6,
+        boxShadow: "0 4px 12px rgba(124,58,237,0.08)",
+        transition: "transform 0.1s ease, box-shadow 0.1s ease",
+        WebkitTapHighlightColor: "transparent",
+        outline: "none",
+      }}
+    >
+      Valider
+    </button>
+
+    <div style={{ marginTop: 12 }}>
       <div
-        key={item}
         style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 6,
-          padding: "8px 10px",
-          borderRadius: 999,
-          background: "#f5f3ff",
-          color: "#5b21b6",
           fontSize: 13,
-          fontWeight: 600,
+          fontWeight: 700,
+          color: "#6b7280",
+          marginBottom: 8,
         }}
       >
-        <span>{item}</span>
-
-        <button
-          onClick={() => {
-            const updated = categories.filter((cat) => cat !== item);
-            setCategories(updated);
-
-            if (category === item && updated.length > 0) {
-              setCategory(updated[0]);
-            }
-          }}
-          style={{
-            border: "none",
-            background: "transparent",
-            color: "#7c3aed",
-            cursor: "pointer",
-            fontSize: 12,
-            fontWeight: 700,
-            padding: 0,
-          }}
-        >
-          ✕
-        </button>
+        Catégories existantes
       </div>
-    ))}
-  </div>
-</div>
-</>
+
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+        {categories.map((item) => {
+          const itemName = typeof item === "string" ? item : item.name;
+          const itemColor =
+            typeof item === "string"
+              ? getCategoryMeta(item).color
+              : item.color;
+
+          const itemBg =
+            typeof item === "string"
+              ? getCategoryMeta(item).bg
+              : `${item.color}22`;
+
+          return (
+            <div
+              key={itemName}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                padding: "8px 10px",
+                borderRadius: 999,
+                background: itemBg,
+                color: itemColor,
+                fontSize: 13,
+                fontWeight: 600,
+              }}
+            >
+              <span>{itemName}</span>
+
+              <button
+                onClick={() => {
+                  
+  const itemName = typeof item === "string" ? item : item.name;
+
+  // 1. supprimer la catégorie
+  const updatedCategories = categories.filter((cat) => {
+    const catName = typeof cat === "string" ? cat : cat.name;
+    return catName !== itemName;
+  });
+
+  // 2. supprimer les dépenses liées
+  setData((prev) => ({
+    ...prev,
+    currentExpenses: prev.currentExpenses.filter(
+      (expense) => expense.category !== itemName
+    ),
+  }));
+
+  // 3. appliquer les nouvelles catégories
+  setCategories(updatedCategories);
+
+  // 4. si la catégorie actuelle est supprimée → fallback
+  if (category === itemName && updatedCategories.length > 0) {
+    const firstName =
+      typeof updatedCategories[0] === "string"
+        ? updatedCategories[0]
+        : updatedCategories[0].name;
+
+    setCategory(firstName);
+  }
+}}
+onMouseEnter={(e) => {
+  e.currentTarget.style.background = "#f3f4f6";
+  e.currentTarget.style.color = "#111";
+}}
+onMouseLeave={(e) => {
+  e.currentTarget.style.background = "transparent";
+  e.currentTarget.style.color = "#6b7280";
+}}
+style={{
+  border: "none",
+  background: "transparent",
+  color: "#6b7280",
+  cursor: "pointer",
+  fontSize: 12,
+  fontWeight: 700,
+  padding: "2px 4px",
+  borderRadius: 6,
+  transition: "background 0.1s ease, color 0.1s ease",
+}}
+              >
+                ✕
+              </button>
+            </div>
+          );
+        })}
+      </div>
     </div>
   </div>
 )}
@@ -618,9 +775,15 @@ onBlur={(e) => {
                       appearance: "none",
                     }}
                   >
-                    {categories.map((item) => (
-  <option key={item}>{item}</option>
-))}
+                   {categories.map((item) => {
+  const categoryName = typeof item === "string" ? item : item.name;
+
+  return (
+    <option key={categoryName} value={categoryName}>
+      {categoryName}
+    </option>
+  );
+})}
                   </select>
                   
                   
@@ -689,6 +852,23 @@ onTouchEnd={(e) => {
                     gap: 10,
                   }}
                 >
+                  <div style={{ marginBottom: 10 }}>
+  <button
+    onClick={() => setSelectedFilter("Toutes")}
+    style={{
+      border: "none",
+      background: selectedFilter === "Toutes" ? "#18181b" : "#f3f4f6",
+      color: selectedFilter === "Toutes" ? "#fff" : "#374151",
+      borderRadius: 999,
+      padding: "8px 12px",
+      fontSize: 13,
+      fontWeight: 700,
+      cursor: "pointer",
+    }}
+  >
+    Toutes
+  </button>
+</div>
                   {Object.keys(categoryTotals).length === 0 ? (
                     <div
                       style={{
@@ -705,16 +885,27 @@ onTouchEnd={(e) => {
 
                       return (
                         <div
-                          key={category}
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            background: "#fff",
-                            borderRadius: 14,
-                            padding: "12px 14px",
-                          }}
-                        >
+  key={category}
+  onClick={() =>
+    setSelectedFilter(
+      selectedFilter === category ? "Toutes" : category
+    )
+  }
+  style={{
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    background: selectedFilter === category ? "#ede9fe" : "#fff",
+    borderRadius: 14,
+    padding: "12px 14px",
+    cursor: "pointer",
+    border:
+      selectedFilter === category
+        ? "2px solid #7c3aed"
+        : "1px solid transparent",
+    transition: "all 0.15s ease",
+  }}
+>
                           <div
                             style={{
                               display: "inline-flex",
@@ -722,13 +913,13 @@ onTouchEnd={(e) => {
                               gap: 6,
                               padding: "6px 10px",
                               borderRadius: 999,
-                              background: getCategoryMeta(category).bg,
-                              color: getCategoryMeta(category).color,
+                              background: getCategoryStyle(category, categories).bg,
+                              color: getCategoryStyle(category, categories).color,
                               fontSize: 13,
                               fontWeight: 600,
                             }}
                           >
-                            <span>{getCategoryMeta(category).emoji}</span>
+                            <span>{getCategoryStyle(category, categories).emoji}</span>
                             <span>{category}</span>
                           </div>
 
@@ -768,6 +959,10 @@ onTouchEnd={(e) => {
                   </div>
                 ) : (
                   [...data.currentExpenses]
+  .filter(
+    (item) =>
+      selectedFilter === "Toutes" || item.category === selectedFilter
+  )
   .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
   .map((item) => (
                     <div
@@ -813,13 +1008,13 @@ onTouchEnd={(e) => {
                             gap: 6,
                             padding: "6px 10px",
                             borderRadius: 999,
-                            background: getCategoryMeta(item.category).bg,
-                            color: getCategoryMeta(item.category).color,
+                            background: getCategoryStyle(item.category, categories).bg,
+                            color: getCategoryStyle(item.category, categories).color,
                             fontSize: 13,
                             fontWeight: 600,
                           }}
                         >
-                          <span>{getCategoryMeta(item.category).emoji}</span>
+                          <span>{getCategoryStyle(item.category, categories).emoji}</span>
                           <span>{item.category}</span>
                         </div>
 
@@ -948,13 +1143,13 @@ onTouchEnd={(e) => {
                                   gap: 6,
                                   padding: "6px 10px",
                                   borderRadius: 999,
-                                  background: getCategoryMeta(item.category).bg,
-                                  color: getCategoryMeta(item.category).color,
+                                  background: getCategoryStyle(item.category, categories).bg,
+                                  color: getCategoryStyle(item.category, categories).color,
                                   fontSize: 13,
                                   fontWeight: 600,
                                 }}
                               >
-                                <span>{getCategoryMeta(item.category).emoji}</span>
+                                <span>{getCategoryStyle(item.category, categories).emoji}</span>
                                 <span>{item.category}</span>
                               </div>
 
@@ -974,6 +1169,7 @@ onTouchEnd={(e) => {
                             </strong>
                           </div>
                         ))}
+                        
                       </div>
                     </div>
                   );
@@ -983,6 +1179,18 @@ onTouchEnd={(e) => {
           )}
         </div>
       </div>
+      <div
+  style={{
+    marginTop: 20,
+    textAlign: "center",
+    fontSize: 12,
+    color: "#9aa1ad",
+    fontWeight: 500,
+    letterSpacing: "0.3px",
+  }}
+>
+  Made by Mathou 
+</div>
     </div>
   );
 }
