@@ -514,29 +514,14 @@ const [selectedColor, setSelectedColor] = useState("#f97316");
       >
         Catégories existantes
       </div>
-
-        <button
-  onClick={() => {
-    if (confirm("Supprimer toutes les données ?")) {
-      localStorage.clear();
-      window.location.reload();
-    }
-  }}
+<div
   style={{
-    width: "100%",
-    padding: "12px 14px",
-    borderRadius: 14,
-    border: "none",
-    background: "#ef4444",
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: 700,
-    cursor: "pointer",
-    marginTop: 12,
+    height: 1,
+    background: "#e5e7eb",
+    marginBottom: 12,
   }}
->
-  🔄 Reset l'app
-</button>
+/>
+        
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
         {categories.map((item) => {
@@ -626,6 +611,30 @@ style={{
           );
         })}
       </div>
+      <div style={{ marginTop: 20, paddingTop: 12 }}>
+  <button
+    onClick={() => {
+      if (confirm("Supprimer toutes les données ?")) {
+        localStorage.clear();
+        window.location.reload();
+      }
+    }}
+    style={{
+      width: "100%",
+      padding: "10px",
+      borderRadius: 12,
+      border: "1px solid #fecaca",
+      background: "#fff",
+      color: "#dc2626",
+      fontSize: 13,
+      fontWeight: 600,
+      cursor: "pointer",
+      opacity: 0.8,
+    }}
+  >
+    Réinitialiser les données
+  </button>
+</div>
     </div>
   </div>
 )}
