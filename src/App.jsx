@@ -812,22 +812,22 @@ onBlur={(e) => {
   value={selectedDate}
   onChange={(e) => setSelectedDate(e.target.value)}
   style={{
-    width: "100%",
-    border: "1px solid #ddd6fe",
-boxShadow: "0 6px 18px rgba(124,58,237,0.08)",
-transition: "border-color 0.2s ease, box-shadow 0.2s ease",
-    padding: "16px 18px",
-    borderRadius: 18,
-    border: "1px solid #e5e7eb",
-    fontSize: 17,
-    fontWeight: 600,
-    boxSizing: "border-box",
-    outline: "none",
-    background: "#ffffff",
-    color: "#374151",
-    marginTop: 10,
-    boxShadow: "0 4px 12px rgba(0,0,0,0.03)",
-  }}
+  width: "100%",
+  height: 48,
+  padding: "0 12px",
+  borderRadius: 14,
+  border: "1px solid #ddd6fe",
+  fontSize: 16,
+  fontWeight: 600,
+  boxSizing: "border-box",
+  outline: "none",
+  background: "#ffffff",
+  color: "#374151",
+  marginTop: 10,
+  boxShadow: "0 6px 18px rgba(124,58,237,0.08)",
+  transition: "border-color 0.2s ease, box-shadow 0.2s ease",
+  WebkitAppearance: "none",
+}}
 />
 
                   <select
