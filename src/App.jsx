@@ -81,6 +81,7 @@ export default function App() {
 
   const [activeTab, setActiveTab] = useState("current");
   const [darkMode, setDarkMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [amount, setAmount] = useState("");
   const [showSettings, setShowSettings] = useState(false);
   const [category, setCategory] = useState("Bouffe");
@@ -117,6 +118,13 @@ const [selectedColor, setSelectedColor] = useState("#f97316");
       history: {},
     };
   });
+  useEffect(() => {
+  const timer = setTimeout(() => {
+    setIsLoading(false);
+  }, 1500);
+
+  return () => clearTimeout(timer);
+}, []);
 
   useEffect(() => {
     setData((prev) => {
@@ -144,6 +152,75 @@ const [selectedColor, setSelectedColor] = useState("#f97316");
   localStorage.setItem("categories", JSON.stringify(categories));
 }, [categories]);
 
+if (isLoading) {
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        background: darkMode
+          ? "linear-gradient(180deg, #0f0f12 0%, #18181b 100%)"
+          : "linear-gradient(180deg, #f7f2ff 0%, #f5f7fb 45%, #eef2f7 100%)",
+        color: darkMode ? "#f4f4f5" : "#18181b",
+        padding: 24,
+      }}
+    >
+      <div
+        style={{
+          fontSize: 56,
+          marginBottom: 16,
+        }}
+      >
+        💰
+      </div>
+
+      <div
+        style={{
+          fontSize: 28,
+          fontWeight: 800,
+          marginBottom: 10,
+          textAlign: "center",
+        }}
+      >
+        Budget mensuel
+      </div>
+
+      <div
+        style={{
+          fontSize: 14,
+          color: darkMode ? "#a1a1aa" : "#6b7280",
+          marginBottom: 24,
+          textAlign: "center",
+        }}
+      >
+        Chargement...
+      </div>
+
+      <div
+        style={{
+          width: 36,
+          height: 36,
+          borderRadius: "50%",
+          border: "4px solid rgba(124,58,237,0.2)",
+          borderTop: "4px solid #7c3aed",
+          animation: "spin 1s linear infinite",
+        }}
+      />
+
+      <style>
+        {`
+          @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }
+        `}
+      </style>
+    </div>
+  );
+}
   const addExpense = () => {
     if (!amount.trim()) return;
 
@@ -210,9 +287,9 @@ const [selectedColor, setSelectedColor] = useState("#f97316");
       >
         <div
           style={{
-            background: darkMode
-            ? "rgba(24,24,27,0.9)"
-            : "rgba(255,255,255,0.88)",
+           background: darkMode
+  ? "rgba(24,24,27,0.92)"
+  : "rgba(255,255,255,0.88)",
             color: darkMode ? "#f4f4f5" : "#18181b",
             border: darkMode
           ? "1px solid rgba(255,255,255,0.05)"
@@ -221,14 +298,16 @@ const [selectedColor, setSelectedColor] = useState("#f97316");
             borderRadius: 28,
             padding: 20,
             boxShadow: "0 12px 40px rgba(31, 31, 31, 0.08)",
-            border: "1px solid rgba(255,255,255,0.7)",
+            border: darkMode
+  ? "1px solid rgba(255,255,255,0.06)"
+  : "1px solid rgba(255,255,255,0.7)",
           }}
         >
           <div style={{ marginBottom: 18 }}>
             <div
               style={{
                 fontSize: 14,
-                color: "#6f6f7b",
+                color: darkMode ? "#a1a1aa" : "#6f6f7b",
                 marginBottom: 6,
               }}
             >
@@ -249,7 +328,7 @@ const [selectedColor, setSelectedColor] = useState("#f97316");
     style={{
       margin: 0,
       fontSize: 30,
-      color: "#18181b",
+      color: darkMode ? "#f4f4f5" : "#18181b",
       lineHeight: 1.1,
       textAlign: "center",
       whiteSpace: "nowrap",
@@ -262,7 +341,7 @@ const [selectedColor, setSelectedColor] = useState("#f97316");
     onClick={() => setShowSettings(!showSettings)}
     style={{
       border: "none",
-      background: "#f3f4f8",
+      background: darkMode ? "#27272a" : "#f3f4f8",
       borderRadius: 12,
       padding: "8px 10px",
       cursor: "pointer",
@@ -283,12 +362,16 @@ const [selectedColor, setSelectedColor] = useState("#f97316");
     style={{
       marginTop: 12,
       marginBottom: 18,
-      background: "rgba(255,255,255,0.9)",
+      background: darkMode
+  ? "rgba(24,24,27,0.96)"
+  : "rgba(255,255,255,0.9)",
       backdropFilter: "blur(12px)",
       WebkitBackdropFilter: "blur(12px)",
       borderRadius: 20,
       padding: 14,
-      border: "1px solid rgba(255,255,255,0.7)",
+      border: darkMode
+  ? "1px solid rgba(255,255,255,0.06)"
+  : "1px solid rgba(255,255,255,0.7)",
       boxShadow: "0 10px 30px rgba(31,31,31,0.08)",
     }}
   >
@@ -296,7 +379,7 @@ const [selectedColor, setSelectedColor] = useState("#f97316");
       style={{
         fontSize: 15,
         fontWeight: 800,
-        color: "#18181b",
+        color: darkMode ? "#f4f4f5" : "#18181b",
         marginBottom: 4,
       }}
     >
@@ -306,7 +389,7 @@ const [selectedColor, setSelectedColor] = useState("#f97316");
     <div
       style={{
         fontSize: 13,
-        color: "#6b7280",
+        color: darkMode ? "#a1a1aa" : "#6b7280",
         marginBottom: 12,
       }}
     >
@@ -320,14 +403,14 @@ const [selectedColor, setSelectedColor] = useState("#f97316");
     marginBottom: 12,
     padding: "10px 12px",
     borderRadius: 14,
-    background: "#f8f8fc",
+    background: darkMode ? "#232326" : "#f8f8fc",
   }}
 >
   <div
     style={{
       fontSize: 14,
       fontWeight: 600,
-      color: "#18181b",
+      color: darkMode ? "#f4f4f5" : "#18181b",
     }}
   >
     Mode sombre
@@ -508,7 +591,7 @@ const [selectedColor, setSelectedColor] = useState("#f97316");
         style={{
           fontSize: 13,
           fontWeight: 700,
-          color: "#6b7280",
+          color: darkMode ? "#a1a1aa" : "#6b7280",
           marginBottom: 8,
         }}
       >
@@ -517,7 +600,7 @@ const [selectedColor, setSelectedColor] = useState("#f97316");
 <div
   style={{
     height: 1,
-    background: "#e5e7eb",
+    background: darkMode ? "#3f3f46" : "#e5e7eb",
     marginBottom: 12,
   }}
 />
@@ -624,7 +707,7 @@ style={{
       padding: "10px",
       borderRadius: 12,
       border: "1px solid #fecaca",
-      background: "#fff",
+      background: darkMode ? "#18181b" : "#fff",
       color: "#dc2626",
       fontSize: 13,
       fontWeight: 600,
@@ -643,7 +726,7 @@ style={{
               style={{
                 marginTop: 10,
                 marginBottom: 0,
-                color: "#5f6470",
+                color: darkMode ? "#a1a1aa" : "#5f6470",
                 fontSize: 15,
               }}
             >
@@ -654,7 +737,7 @@ style={{
           <div
             style={{
               display: "flex",
-              background: "#f3f4f8",
+              background: darkMode ? "#27272a" : "#f3f4f8",
               borderRadius: 16,
               padding: 4,
               marginBottom: 18,
@@ -673,9 +756,15 @@ onTouchEnd={(e) => {
                 border: "none",
                 borderRadius: 12,
                 padding: "12px 10px",
-                background: activeTab === "current" ? "#18181b" : "transparent",
                 transition: "transform 0.15s ease",
-                color: activeTab === "current" ? "#fff" : "#555",
+               background:
+                activeTab === "current"
+                ? (darkMode ? "#3f3f46" : "#18181b")
+                : "transparent",
+                color:
+                activeTab === "current"
+                ? "#fff"
+                : (darkMode ? "#a1a1aa" : "#555"),
                 fontWeight: 600,
                 fontSize: 14,
                 cursor: "pointer",
@@ -698,8 +787,16 @@ onTouchEnd={(e) => {
                 borderRadius: 12,
                 padding: "12px 10px",
                 background: activeTab === "history" ? "#18181b" : "transparent",
-                transition: "transform 0.15s ease",
                 color: activeTab === "history" ? "#fff" : "#555",
+                background:
+                activeTab === "history"
+                ? (darkMode ? "#3f3f46" : "#18181b")
+                : "transparent",
+                color:
+                activeTab === "history"
+                ? "#fff"
+                : (darkMode ? "#a1a1aa" : "#555"),
+                transition: "transform 0.15s ease",
                 fontWeight: 600,
                 fontSize: 14,
                 cursor: "pointer",
@@ -761,7 +858,11 @@ onTouchEnd={(e) => {
 
               <div
                 style={{
-                  background: "#f8f8fc",
+                  background: darkMode ? "#232326" : "#f8f8fc",
+                  border: darkMode ? "1px solid rgba(255,255,255,0.06)" : "none",
+                  boxShadow: darkMode
+  ? "0 10px 30px rgba(0,0,0,0.25)"
+  : "0 10px 30px rgba(31,31,31,0.06)",
                   borderRadius: 20,
                   padding: 18,
                   marginBottom: 18,
@@ -780,20 +881,22 @@ onTouchEnd={(e) => {
   e.target.style.boxShadow = "0 0 0 3px rgba(124,58,237,0.15)";
 }}
 onBlur={(e) => {
-  e.target.style.border = "1px solid #ddd6fe";
-  e.target.style.boxShadow = "0 6px 18px rgba(124,58,237,0.08)";
+  e.target.style.border = darkMode ? "1px solid #3f3f46" : "1px solid #ddd6fe";
+e.target.style.boxShadow = darkMode
+  ? "0 6px 18px rgba(0,0,0,0.25)"
+  : "0 6px 18px rgba(124,58,237,0.08)";
 }}
                 style={{
                 width: "100%",
                 padding: "16px 18px",
                 borderRadius: 18,
-                border: "1px solid #ddd6fe",
                 fontSize: 17,
                 fontWeight: 600,
                 boxSizing: "border-box",
                 outline: "none",
-                background: "#ffffff",
-                color: "#18181b",
+                background: darkMode ? "#18181b" : "#ffffff",
+                color: darkMode ? "#f4f4f5" : "#18181b",
+                border: darkMode ? "1px solid #3f3f46" : "1px solid #ddd6fe",
                 boxShadow: "0 6px 18px rgba(124,58,237,0.08)",
                 transition: "border-color 0.2s ease, box-shadow 0.2s ease",
 }}
@@ -806,8 +909,10 @@ onBlur={(e) => {
   e.target.style.boxShadow = "0 0 0 3px rgba(124,58,237,0.15)";
 }}
 onBlur={(e) => {
-  e.target.style.border = "1px solid #ddd6fe";
-  e.target.style.boxShadow = "0 6px 18px rgba(124,58,237,0.08)";
+  e.target.style.border = darkMode ? "1px solid #3f3f46" : "1px solid #ddd6fe";
+e.target.style.boxShadow = darkMode
+  ? "0 6px 18px rgba(0,0,0,0.25)"
+  : "0 6px 18px rgba(124,58,237,0.08)";
 }}
   value={selectedDate}
   onChange={(e) => setSelectedDate(e.target.value)}
@@ -816,13 +921,13 @@ onBlur={(e) => {
   height: 48,
   padding: "0 12px",
   borderRadius: 14,
-  border: "1px solid #ddd6fe",
   fontSize: 16,
   fontWeight: 600,
   boxSizing: "border-box",
   outline: "none",
-  background: "#ffffff",
-  color: "#374151",
+  background: darkMode ? "#18181b" : "#ffffff",
+  color: darkMode ? "#f4f4f5" : "#374151",
+  border: darkMode ? "1px solid #3f3f46" : "1px solid #ddd6fe",
   marginTop: 10,
   boxShadow: "0 6px 18px rgba(124,58,237,0.08)",
   transition: "border-color 0.2s ease, box-shadow 0.2s ease",
@@ -838,14 +943,15 @@ onBlur={(e) => {
   e.target.style.boxShadow = "0 0 0 3px rgba(124,58,237,0.15)";
 }}
 onBlur={(e) => {
-  e.target.style.border = "1px solid #ddd6fe";
-  e.target.style.boxShadow = "0 6px 18px rgba(124,58,237,0.08)";
+  e.target.style.border = darkMode ? "1px solid #3f3f46" : "1px solid #ddd6fe";
+e.target.style.boxShadow = darkMode
+  ? "0 6px 18px rgba(0,0,0,0.25)"
+  : "0 6px 18px rgba(124,58,237,0.08)";
 }}
                     style={{
                       width: "100%",
                       padding: "12px 14px",
                       borderRadius: 12,
-                      border: "1px solid #e5e7eb",
                       fontSize: 15,
                       fontWeight: 600,
                       boxSizing: "border-box",
@@ -853,8 +959,9 @@ onBlur={(e) => {
                       border: "1px solid #ddd6fe",
                       boxShadow: "0 6px 18px rgba(124,58,237,0.08)",
                       transition: "border-color 0.2s ease, box-shadow 0.2s ease",
-                      background: "#ffffff",
-                      color: "#2563eb",
+                      background: darkMode ? "#18181b" : "#ffffff",
+                      color: darkMode ? "#c4b5fd" : "#2563eb",
+                      border: darkMode ? "1px solid #3f3f46" : "1px solid #ddd6fe",
                       marginTop: 2,
                       boxShadow: "0 4px 14px rgba(0,0,0,0.04)",
                       appearance: "none",
@@ -919,7 +1026,7 @@ onTouchEnd={(e) => {
                 <h2
                   style={{
                     fontSize: 18,
-                    color: "#18181b",
+                    color: darkMode ? "#f4f4f5" : "#18181b",
                     marginTop: 0,
                     marginBottom: 12,
                   }}
@@ -929,7 +1036,7 @@ onTouchEnd={(e) => {
 
                 <div
                   style={{
-                    background: "#f8f8fc",
+                    background: darkMode ? "#232326" : "#f8f8fc",
                     borderRadius: 18,
                     padding: 14,
                     display: "flex",
@@ -942,8 +1049,15 @@ onTouchEnd={(e) => {
     onClick={() => setSelectedFilter("Toutes")}
     style={{
       border: "none",
-      background: selectedFilter === "Toutes" ? "#18181b" : "#f3f4f6",
-      color: selectedFilter === "Toutes" ? "#fff" : "#374151",
+      background:
+  selectedFilter === "Toutes"
+    ? (darkMode ? "#3f3f46" : "#18181b")
+    : (darkMode ? "#27272a" : "#f3f4f6"),
+
+color:
+  selectedFilter === "Toutes"
+    ? "#fff"
+    : (darkMode ? "#d4d4d8" : "#374151"),
       borderRadius: 999,
       padding: "8px 12px",
       fontSize: 13,
@@ -980,14 +1094,19 @@ onTouchEnd={(e) => {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    background: selectedFilter === category ? "#ede9fe" : "#fff",
+    background:
+  selectedFilter === category
+    ? (darkMode ? "#312e81" : "#ede9fe")
+    : (darkMode ? "#18181b" : "#fff"),
     borderRadius: 14,
     padding: "12px 14px",
     cursor: "pointer",
     border:
-      selectedFilter === category
-        ? "2px solid #7c3aed"
-        : "1px solid transparent",
+  selectedFilter === category
+    ? "2px solid #7c3aed"
+    : darkMode
+      ? "1px solid #27272a"
+      : "1px solid transparent",
     transition: "all 0.15s ease",
   }}
 >
@@ -1008,7 +1127,12 @@ onTouchEnd={(e) => {
                             <span>{category}</span>
                           </div>
 
-                          <strong style={{ color: "#18181b", fontSize: 15 }}>
+                          <strong
+  style={{
+    color: darkMode ? "#f4f4f5" : "#18181b",
+    fontSize: 15,
+  }}
+>
                             {total.toFixed(2)} € ({percent}%)
                           </strong>
                         </div>
@@ -1022,7 +1146,7 @@ onTouchEnd={(e) => {
                 <h2
                   style={{
                     fontSize: 18,
-                    color: "#18181b",
+                    color: darkMode ? "#f4f4f5" : "#18181b",
                     marginTop: 0,
                     marginBottom: 12,
                   }}
@@ -1033,11 +1157,12 @@ onTouchEnd={(e) => {
                 {data.currentExpenses.length === 0 ? (
                   <div
                     style={{
-                      background: "#f8f8fc",
+                      background: darkMode ? "#232326" : "#f8f8fc",
+color: darkMode ? "#a1a1aa" : "#7a7f8c",
                       borderRadius: 18,
                       padding: 18,
                       textAlign: "center",
-                      color: "#7a7f8c",
+
                     }}
                   >
                     Commence par ajouter ta première dépense ✨
@@ -1062,15 +1187,17 @@ onTouchEnd={(e) => {
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  background: "rgba(255,255,255,0.72)",
+  background: darkMode ? "rgba(39,39,42,0.95)" : "rgba(255,255,255,0.72)",
   backdropFilter: "blur(14px)",
   WebkitBackdropFilter: "blur(14px)",
   borderRadius: 22,
   padding: 16,
   marginBottom: 12,
   transition: "transform 0.15s ease, box-shadow 0.2s ease",
-  border: "1px solid rgba(255,255,255,0.7)",
-  boxShadow: "0 10px 30px rgba(31, 31, 31, 0.06)",
+  border: darkMode ? "1px solid rgba(255,255,255,0.05)" : "1px solid rgba(255,255,255,0.7)",
+boxShadow: darkMode
+  ? "0 10px 30px rgba(0,0,0,0.22)"
+  : "0 10px 30px rgba(31,31,31,0.06)",
 }}
 >
                       <div>
@@ -1078,7 +1205,7 @@ onTouchEnd={(e) => {
                           style={{
   fontSize: 19,
   fontWeight: 800,
-  color: "#111827",
+  color: darkMode ? "#f4f4f5" : "#111827",
   letterSpacing: "-0.3px",
 }}
                         >
@@ -1124,13 +1251,13 @@ onTouchEnd={(e) => {
 }}
                         style={{
   border: "none",
-  background: "rgba(255,255,255,0.85)",
+  background: darkMode ? "#18181b" : "rgba(255,255,255,0.85)",
+  color: darkMode ? "#d4d4d8" : "#6b7280",
   borderRadius: 14,
   padding: "10px 14px",
   cursor: "pointer",
   fontSize: 12,
-  fontWeight: 700,
-  color: "#6b7280",
+  fontWeight: 700,  
   boxShadow: "0 6px 16px rgba(0,0,0,0.05)",
   transition: "transform 0.15s ease, background 0.2s ease",
 }}
@@ -1147,7 +1274,7 @@ onTouchEnd={(e) => {
               <h2
                 style={{
                   fontSize: 18,
-                  color: "#18181b",
+                  color: darkMode ? "#f4f4f5" : "#18181b",
                   marginTop: 0,
                   marginBottom: 12,
                 }}
@@ -1158,11 +1285,11 @@ onTouchEnd={(e) => {
               {historyMonths.length === 0 ? (
                 <div
                   style={{
-                    background: "#f8f8fc",
+                    background: darkMode ? "#232326" : "#f8f8fc",
+color: darkMode ? "#a1a1aa" : "#7a7f8c",
                     borderRadius: 18,
                     padding: 18,
                     textAlign: "center",
-                    color: "#7a7f8c",
                   }}
                 >
                   Aucun mois archivé pour le moment
@@ -1179,7 +1306,7 @@ onTouchEnd={(e) => {
                     <div
                       key={monthKey}
                       style={{
-                        background: "#f8f8fc",
+                        background: darkMode ? "#232326" : "#f8f8fc",
                         borderRadius: 18,
                         padding: 16,
                         marginBottom: 12,
@@ -1189,7 +1316,7 @@ onTouchEnd={(e) => {
                         style={{
                           fontSize: 17,
                           fontWeight: 700,
-                          color: "#18181b",
+                          color: darkMode ? "#f4f4f5" : "#18181b",
                           marginBottom: 6,
                           textTransform: "capitalize",
                         }}
@@ -1200,7 +1327,7 @@ onTouchEnd={(e) => {
                       <div
                         style={{
                           fontSize: 15,
-                          color: "#5f6470",
+                          color: darkMode ? "#a1a1aa" : "#5f6470",
                           marginBottom: 10,
                         }}
                       >
@@ -1212,7 +1339,7 @@ onTouchEnd={(e) => {
                           <div
                             key={item.id}
                             style={{
-                              background: "#fff",
+                              background: darkMode ? "#18181b" : "#fff",
                               borderRadius: 14,
                               padding: 12,
                               display: "flex",
@@ -1270,7 +1397,7 @@ onTouchEnd={(e) => {
     marginTop: 20,
     textAlign: "center",
     fontSize: 12,
-    color: "#9aa1ad",
+    color: darkMode ? "#71717a" : "#9aa1ad",
     fontWeight: 500,
     letterSpacing: "0.3px",
   }}
