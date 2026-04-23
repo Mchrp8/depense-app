@@ -157,6 +157,8 @@ if (isLoading) {
     <div
       style={{
         minHeight: "100vh",
+        paddingTop: "calc(env(safe-area-inset-top) + 16px)",
+        paddingBottom: "calc(env(safe-area-inset-bottom) + 16px)",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -169,46 +171,65 @@ if (isLoading) {
       }}
     >
       <div
-        style={{
-          fontSize: 56,
-          marginBottom: 16,
-        }}
-      >
-        💰
-      </div>
+  style={{
+    width: 88,
+    height: 88,
+    borderRadius: 28,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 22,
+    background: darkMode
+      ? "linear-gradient(135deg, #27272a 0%, #3f3f46 100%)"
+      : "linear-gradient(135deg, #ffffff 0%, #f3e8ff 100%)",
+    boxShadow: darkMode
+      ? "0 18px 40px rgba(0,0,0,0.35)"
+      : "0 18px 40px rgba(124,58,237,0.18)",
+    fontSize: 42,
+  }}
+>
+  💰
+</div>
 
       <div
         style={{
-          fontSize: 28,
-          fontWeight: 800,
-          marginBottom: 10,
-          textAlign: "center",
-        }}
+  fontSize: 30,
+  fontWeight: 800,
+  marginBottom: 8,
+  textAlign: "center",
+  letterSpacing: "-0.5px",
+}}
       >
         Budget mensuel
       </div>
 
       <div
         style={{
-          fontSize: 14,
-          color: darkMode ? "#a1a1aa" : "#6b7280",
-          marginBottom: 24,
-          textAlign: "center",
-        }}
+  fontSize: 14,
+  color: darkMode ? "#a1a1aa" : "#6b7280",
+  marginBottom: 24,
+  textAlign: "center",
+  letterSpacing: "0.2px",
+}}
       >
         Chargement...
       </div>
 
       <div
-        style={{
-          width: 36,
-          height: 36,
-          borderRadius: "50%",
-          border: "4px solid rgba(124,58,237,0.2)",
-          borderTop: "4px solid #7c3aed",
-          animation: "spin 1s linear infinite",
-        }}
-      />
+  style={{
+    width: 42,
+    height: 42,
+    borderRadius: "50%",
+    border: darkMode
+      ? "3px solid rgba(255,255,255,0.10)"
+      : "3px solid rgba(124,58,237,0.16)",
+    borderTop: "3px solid #7c3aed",
+    animation: "spin 0.9s linear infinite",
+    boxShadow: darkMode
+      ? "0 0 18px rgba(124,58,237,0.12)"
+      : "0 0 18px rgba(124,58,237,0.10)",
+  }}
+/>
 
       <style>
         {`
@@ -360,20 +381,22 @@ if (isLoading) {
 {showSettings && (
   <div
     style={{
-      marginTop: 12,
-      marginBottom: 18,
-      background: darkMode
-  ? "rgba(24,24,27,0.96)"
-  : "rgba(255,255,255,0.9)",
-      backdropFilter: "blur(12px)",
-      WebkitBackdropFilter: "blur(12px)",
-      borderRadius: 20,
-      padding: 14,
-      border: darkMode
-  ? "1px solid rgba(255,255,255,0.06)"
-  : "1px solid rgba(255,255,255,0.7)",
-      boxShadow: "0 10px 30px rgba(31,31,31,0.08)",
-    }}
+  marginTop: 10,
+  marginBottom: 18,
+  background: darkMode
+    ? "rgba(24,24,27,0.98)"
+    : "rgba(255,255,255,0.96)",
+  backdropFilter: "blur(18px)",
+  WebkitBackdropFilter: "blur(18px)",
+  borderRadius: 24,
+  padding: 16,
+  border: darkMode
+    ? "1px solid rgba(255,255,255,0.08)"
+    : "1px solid rgba(255,255,255,0.8)",
+  boxShadow: darkMode
+    ? "0 24px 60px rgba(0,0,0,0.45)"
+    : "0 24px 60px rgba(31,31,31,0.12)",
+}}
   >
     <div
       style={{
