@@ -126,6 +126,21 @@ const [selectedColor, setSelectedColor] = useState("#f97316");
   return () => clearTimeout(timer);
 }, []);
 
+useEffect(() => {
+  const color = darkMode ? "#18181b" : "#f7f2ff";
+
+  document.body.style.background = color;
+
+  let meta = document.querySelector("meta[name='theme-color']");
+  if (!meta) {
+    meta = document.createElement("meta");
+    meta.name = "theme-color";
+    document.head.appendChild(meta);
+  }
+
+  meta.setAttribute("content", color);
+}, [darkMode]);
+
   useEffect(() => {
     setData((prev) => {
       if (prev.currentMonth === currentMonthKey) return prev;

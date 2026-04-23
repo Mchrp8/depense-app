@@ -110,4 +110,10 @@ code {
   background: var(--code-bg);
 }
 
+html, body {
+  background: #18181b;
+}
 
+body {
+  overscroll-behavior-y: contain;
+}
