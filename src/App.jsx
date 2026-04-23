@@ -156,9 +156,11 @@ if (isLoading) {
   return (
     <div
       style={{
-        minHeight: "100vh",
+        minHeight: "100dvh",
         paddingTop: "calc(env(safe-area-inset-top) + 16px)",
-        paddingBottom: "calc(env(safe-area-inset-bottom) + 16px)",
+paddingBottom: "calc(env(safe-area-inset-bottom) + 16px)",
+paddingLeft: "max(16px, env(safe-area-inset-left))",
+paddingRight: "max(16px, env(safe-area-inset-right))",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
