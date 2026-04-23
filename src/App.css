@@ -182,7 +182,3 @@
     border-right-color: var(--border);
   }
 }
-
-body {
-  overscroll-behavior-y: contain;
-}
