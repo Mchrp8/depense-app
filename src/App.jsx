@@ -1359,7 +1359,7 @@ color: darkMode ? "#a1a1aa" : "#7a7f8c",
       selectedFilter === "Toutes" || item.category === selectedFilter
   )
   .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-  .map((item) => (
+  .map((item, index) => (
                     <div
   key={item.id}
   onTouchStart={(e) => {
@@ -1371,6 +1371,7 @@ color: darkMode ? "#a1a1aa" : "#7a7f8c",
   style={{
   display: "flex",
   animation: "expenseIn 0.35s ease",
+  animation: index === 0 ? "expenseIn 0.75s cubic-bezier(0.22, 1, 0.36, 1)" : "none",
   justifyContent: "space-between",
   alignItems: "center",
   background: darkMode ? "rgba(39,39,42,0.95)" : "rgba(255,255,255,0.72)",
@@ -1597,11 +1598,18 @@ color: darkMode ? "#a1a1aa" : "#7a7f8c",
     @keyframes expenseIn {
       0% {
         opacity: 0;
-        transform: translateY(14px) scale(0.98);
+        transform: translateY(26px) scale(0.94);
+        filter: blur(6px);
+      }
+      60% {
+        opacity: 1;
+        transform: translateY(-4px) scale(1.01);
+        filter: blur(0);
       }
       100% {
         opacity: 1;
         transform: translateY(0) scale(1);
+        filter: blur(0);
       }
     }
   `}
