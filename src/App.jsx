@@ -82,8 +82,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState("current");
   const [darkMode, setDarkMode] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [appEntered, setAppEntered] = useState(false);
-const [isExiting, setIsExiting] = useState(false);
+  const [isExiting, setIsExiting] = useState(false);
   const [amount, setAmount] = useState("");
   const [showSettings, setShowSettings] = useState(false);
   const [category, setCategory] = useState("Bouffe");
@@ -126,7 +125,6 @@ const [selectedColor, setSelectedColor] = useState("#f97316");
 
     setTimeout(() => {
       setIsLoading(false);
-      setAppEntered(true);
     }, 600);
   }, 2000);
 
@@ -221,6 +219,227 @@ useEffect(() => {
   });
 
   const historyMonths = Object.keys(data.history).sort().reverse();
+  if (isLoading) {
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        position: "relative",
+        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        opacity: isExiting ? 0 : 1,
+        transform: isExiting ? "scale(1.03)" : "scale(1)",
+        transition: "opacity 0.6s ease, transform 0.6s ease",
+        background: darkMode
+          ? "linear-gradient(180deg, #09090b 0%, #111827 45%, #18181b 100%)"
+          : "linear-gradient(180deg, #faf7ff 0%, #f5f7fb 45%, #eef2ff 100%)",
+        color: darkMode ? "#f4f4f5" : "#18181b",
+        padding: 24,
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          top: -80,
+          left: -60,
+          width: 220,
+          height: 220,
+          borderRadius: "50%",
+          background: darkMode
+            ? "radial-gradient(circle, rgba(124,58,237,0.20) 0%, rgba(124,58,237,0) 70%)"
+            : "radial-gradient(circle, rgba(124,58,237,0.18) 0%, rgba(124,58,237,0) 70%)",
+          filter: "blur(8px)",
+          animation: "floatOrb1 6s ease-in-out infinite",
+        }}
+      />
+
+      <div
+        style={{
+          position: "absolute",
+          bottom: -90,
+          right: -50,
+          width: 240,
+          height: 240,
+          borderRadius: "50%",
+          background: darkMode
+            ? "radial-gradient(circle, rgba(59,130,246,0.16) 0%, rgba(59,130,246,0) 72%)"
+            : "radial-gradient(circle, rgba(59,130,246,0.14) 0%, rgba(59,130,246,0) 72%)",
+          filter: "blur(10px)",
+          animation: "floatOrb2 7s ease-in-out infinite",
+        }}
+      />
+
+      <div
+        style={{
+          position: "relative",
+          width: 104,
+          height: 104,
+          borderRadius: 32,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          marginBottom: 24,
+          background: darkMode
+            ? "linear-gradient(135deg, rgba(39,39,42,0.95) 0%, rgba(63,63,70,0.92) 100%)"
+            : "linear-gradient(135deg, rgba(255,255,255,0.96) 0%, rgba(243,232,255,0.98) 100%)",
+          border: darkMode
+            ? "1px solid rgba(255,255,255,0.08)"
+            : "1px solid rgba(255,255,255,0.9)",
+          boxShadow: darkMode
+            ? "0 25px 60px rgba(0,0,0,0.40)"
+            : "0 25px 60px rgba(124,58,237,0.16)",
+          backdropFilter: "blur(18px)",
+          WebkitBackdropFilter: "blur(18px)",
+          animation: "logoFloat 2.4s ease-in-out infinite",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            borderRadius: 32,
+            background:
+              "linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.20) 35%, transparent 65%)",
+            transform: "translateX(-120%)",
+            animation: "shine 2.6s ease-in-out infinite",
+          }}
+        />
+
+        <div
+          style={{
+            fontSize: 46,
+            position: "relative",
+            zIndex: 1,
+            filter: darkMode
+              ? "drop-shadow(0 6px 16px rgba(124,58,237,0.28))"
+              : "drop-shadow(0 6px 16px rgba(124,58,237,0.20))",
+          }}
+        >
+          💰
+        </div>
+      </div>
+
+      <div
+        style={{
+          fontSize: 32,
+          fontWeight: 800,
+          marginBottom: 8,
+          textAlign: "center",
+          letterSpacing: "-0.7px",
+          animation: "fadeUp 0.8s ease-out",
+        }}
+      >
+        Budget mensuel
+      </div>
+
+      <div
+        style={{
+          fontSize: 14,
+          color: darkMode ? "#a1a1aa" : "#6b7280",
+          marginBottom: 24,
+          textAlign: "center",
+          letterSpacing: "0.2px",
+          animation: "fadeUp 1s ease-out",
+        }}
+      >
+        Un instant...
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          animation: "fadeUp 1.15s ease-out",
+        }}
+      >
+        {[0, 1, 2].map((i) => (
+          <div
+            key={i}
+            style={{
+              width: 10,
+              height: 10,
+              borderRadius: "50%",
+              background: i === 1 ? "#7c3aed" : darkMode ? "#3f3f46" : "#d8ccff",
+              boxShadow: i === 1 ? "0 0 16px rgba(124,58,237,0.35)" : "none",
+              animation: `dotPulse 1.2s ease-in-out ${i * 0.18}s infinite`,
+            }}
+          />
+        ))}
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          bottom: 26,
+          fontSize: 11,
+          color: darkMode ? "#71717a" : "#a1a1aa",
+          letterSpacing: "0.25px",
+          animation: "fadeInSoft 1.4s ease-out",
+        }}
+      >
+        Chargement sécurisé
+      </div>
+
+      <style>
+        {`
+          @keyframes fadeUp {
+            0% {
+              opacity: 0;
+              transform: translateY(12px);
+            }
+            100% {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+
+          @keyframes fadeInSoft {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+          }
+
+          @keyframes logoFloat {
+            0% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-6px) scale(1.02); }
+            100% { transform: translateY(0px) scale(1); }
+          }
+
+          @keyframes dotPulse {
+            0%, 100% {
+              transform: translateY(0) scale(0.9);
+              opacity: 0.45;
+            }
+            50% {
+              transform: translateY(-4px) scale(1.15);
+              opacity: 1;
+            }
+          }
+
+          @keyframes shine {
+            0% { transform: translateX(-120%); opacity: 0; }
+            20% { opacity: 1; }
+            60% { transform: translateX(120%); opacity: 1; }
+            100% { transform: translateX(120%); opacity: 0; }
+          }
+
+          @keyframes floatOrb1 {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(18px, 16px); }
+          }
+
+          @keyframes floatOrb2 {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-16px, -12px); }
+          }
+        `}
+      </style>
+    </div>
+  );
+}
 
   return (
   <div
@@ -236,226 +455,7 @@ useEffect(() => {
     }}
   >
 
-    {isLoading && (
-  <div
-    style={{
-      position: "fixed",
-      inset: 0,
-      zIndex: 999,
-      overflow: "hidden",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      background: darkMode
-        ? "linear-gradient(180deg, #09090b 0%, #111827 45%, #18181b 100%)"
-        : "linear-gradient(180deg, #faf7ff 0%, #f5f7fb 45%, #eef2ff 100%)",
-      color: darkMode ? "#f4f4f5" : "#18181b",
-      padding: 24,
-      opacity: isExiting ? 0 : 1,
-      transform: isExiting ? "scale(1.04)" : "scale(1)",
-      transition: "opacity 0.6s ease, transform 0.6s ease",
-    }}
-  >
-    <div
-      style={{
-        position: "absolute",
-        top: -80,
-        left: -60,
-        width: 220,
-        height: 220,
-        borderRadius: "50%",
-        background: darkMode
-          ? "radial-gradient(circle, rgba(124,58,237,0.20) 0%, rgba(124,58,237,0) 70%)"
-          : "radial-gradient(circle, rgba(124,58,237,0.18) 0%, rgba(124,58,237,0) 70%)",
-        filter: "blur(8px)",
-        animation: "floatOrb1 6s ease-in-out infinite",
-      }}
-    />
-
-    <div
-      style={{
-        position: "absolute",
-        bottom: -90,
-        right: -50,
-        width: 240,
-        height: 240,
-        borderRadius: "50%",
-        background: darkMode
-          ? "radial-gradient(circle, rgba(59,130,246,0.16) 0%, rgba(59,130,246,0) 72%)"
-          : "radial-gradient(circle, rgba(59,130,246,0.14) 0%, rgba(59,130,246,0) 72%)",
-        filter: "blur(10px)",
-        animation: "floatOrb2 7s ease-in-out infinite",
-      }}
-    />
-
-    <div
-      style={{
-        position: "relative",
-        width: 104,
-        height: 104,
-        borderRadius: 32,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        marginBottom: 24,
-        background: darkMode
-          ? "linear-gradient(135deg, rgba(39,39,42,0.95) 0%, rgba(63,63,70,0.92) 100%)"
-          : "linear-gradient(135deg, rgba(255,255,255,0.96) 0%, rgba(243,232,255,0.98) 100%)",
-        border: darkMode
-          ? "1px solid rgba(255,255,255,0.08)"
-          : "1px solid rgba(255,255,255,0.9)",
-        boxShadow: darkMode
-          ? "0 25px 60px rgba(0,0,0,0.40)"
-          : "0 25px 60px rgba(124,58,237,0.16)",
-        backdropFilter: "blur(18px)",
-        WebkitBackdropFilter: "blur(18px)",
-        animation: "logoFloat 2.4s ease-in-out infinite",
-      }}
-    >
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          borderRadius: 32,
-          background:
-            "linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.20) 35%, transparent 65%)",
-          transform: "translateX(-120%)",
-          animation: "shine 2.6s ease-in-out infinite",
-        }}
-      />
-
-      <div
-        style={{
-          fontSize: 46,
-          position: "relative",
-          zIndex: 1,
-          filter: darkMode
-            ? "drop-shadow(0 6px 16px rgba(124,58,237,0.28))"
-            : "drop-shadow(0 6px 16px rgba(124,58,237,0.20))",
-        }}
-      >
-        💰
-      </div>
-    </div>
-
-    <div
-      style={{
-        fontSize: 32,
-        fontWeight: 800,
-        marginBottom: 8,
-        textAlign: "center",
-        letterSpacing: "-0.7px",
-        animation: "fadeUp 0.8s ease-out",
-      }}
-    >
-      Budget mensuel
-    </div>
-
-    <div
-      style={{
-        fontSize: 14,
-        color: darkMode ? "#a1a1aa" : "#6b7280",
-        marginBottom: 24,
-        textAlign: "center",
-        letterSpacing: "0.2px",
-        animation: "fadeUp 1s ease-out",
-      }}
-    >
-      Un instant...
-    </div>
-
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 8,
-        animation: "fadeUp 1.15s ease-out",
-      }}
-    >
-      {[0, 1, 2].map((i) => (
-        <div
-          key={i}
-          style={{
-            width: 10,
-            height: 10,
-            borderRadius: "50%",
-            background: i === 1 ? "#7c3aed" : darkMode ? "#3f3f46" : "#d8ccff",
-            boxShadow: i === 1 ? "0 0 16px rgba(124,58,237,0.35)" : "none",
-            animation: `dotPulse 1.2s ease-in-out ${i * 0.18}s infinite`,
-          }}
-        />
-      ))}
-    </div>
-
-    <div
-      style={{
-        position: "absolute",
-        bottom: 26,
-        fontSize: 11,
-        color: darkMode ? "#71717a" : "#a1a1aa",
-        letterSpacing: "0.25px",
-        animation: "fadeInSoft 1.4s ease-out",
-      }}
-    >
-      Chargement sécurisé
-    </div>
-
-    <style>
-      {`
-        @keyframes fadeUp {
-          0% {
-            opacity: 0;
-            transform: translateY(12px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes fadeInSoft {
-          0% { opacity: 0; }
-          100% { opacity: 1; }
-        }
-
-        @keyframes logoFloat {
-          0% { transform: translateY(0px) scale(1); }
-          50% { transform: translateY(-6px) scale(1.02); }
-          100% { transform: translateY(0px) scale(1); }
-        }
-
-        @keyframes dotPulse {
-          0%, 100% {
-            transform: translateY(0) scale(0.9);
-            opacity: 0.45;
-          }
-          50% {
-            transform: translateY(-4px) scale(1.15);
-            opacity: 1;
-          }
-        }
-
-        @keyframes shine {
-          0% { transform: translateX(-120%); opacity: 0; }
-          20% { opacity: 1; }
-          60% { transform: translateX(120%); opacity: 1; }
-          100% { transform: translateX(120%); opacity: 0; }
-        }
-
-        @keyframes floatOrb1 {
-          0%, 100% { transform: translate(0, 0); }
-          50% { transform: translate(18px, 16px); }
-        }
-
-        @keyframes floatOrb2 {
-          0%, 100% { transform: translate(0, 0); }
-          50% { transform: translate(-16px, -12px); }
-        }
-      `}
-    </style>
-  </div>
-)}
+    
     <div
       style={{
         minHeight: "100vh",
@@ -489,10 +489,7 @@ useEffect(() => {
               style={{
                 fontSize: 14,
                 color: darkMode ? "#a1a1aa" : "#6f6f7b",
-                opacity: appEntered ? 1 : 0,
-transform: appEntered ? "translateY(0)" : "translateY(18px)",
-filter: appEntered ? "blur(0)" : "blur(6px)",
-transition: "opacity 0.7s ease, transform 0.7s ease, filter 0.7s ease",
+                
                 marginBottom: 6,
               }}
             >
@@ -999,8 +996,8 @@ onTouchEnd={(e) => {
             <>
               <div
                 style={{
-  //  animation: "tabFade 1s ease",
-   animation: appEntered ? "tabFade 0.7s ease" : "none",
+    animation: "tabFade 1s ease",
+   
   background:
     "linear-gradient(135deg, #18181f 0%, #26283a 45%, #312e81 100%)",
   borderRadius: 26,
@@ -1594,28 +1591,7 @@ color: darkMode ? "#a1a1aa" : "#7a7f8c",
 >
   Made by Mathou 
 </div>
-return (
-  <div>
 
-    ... ton app ...
-
-    <style>
-      {`
-        @keyframes tabFade {
-          0% {
-            opacity: 0;
-            transform: translateY(25px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}
-    </style>
-        
-  </div>
-);
 <style>
   {`
     @keyframes tabFade {
