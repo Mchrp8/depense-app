@@ -157,7 +157,7 @@ if (isLoading) {
     <div
       style={{
         minHeight: "100vh",
-        padding: 16,
+        padding: 20,
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
