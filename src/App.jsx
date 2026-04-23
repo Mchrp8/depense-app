@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 
   if (typeof window !== "undefined" && window.location.search.includes("reset")) {
@@ -56,6 +56,8 @@ function getCategoryEmoji(category) {
   return getCategoryMeta(category).emoji;
 }
 
+
+
 function formatExpenseDate(dateString) {
   const date = new Date(dateString);
   const today = new Date();
@@ -80,6 +82,7 @@ export default function App() {
   const currentMonthKey = getMonthKey();
 
   const [activeTab, setActiveTab] = useState("current");
+  const listRef = useRef(null);
   const [darkMode, setDarkMode] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isExiting, setIsExiting] = useState(false);
@@ -195,6 +198,9 @@ useEffect(() => {
     setAmount("");
 
     setSelectedDate(new Date().toISOString().split("T")[0]);
+    setTimeout(() => {
+  listRef.current?.scrollIntoView({ behavior: "smooth" });
+}, 50);
   };
 
   const removeExpense = (id) => {
@@ -1327,7 +1333,7 @@ color:
                 </div>
               </div>
 
-              <div>
+              <div ref={listRef}>
                 <h2
                   style={{
                     fontSize: 18,
@@ -1370,7 +1376,7 @@ color: darkMode ? "#a1a1aa" : "#7a7f8c",
   }}
   style={{
   display: "flex",
-  animation: "expenseIn 0.35s ease",
+  // animation: "expenseIn 0.35s ease",
   animation: index === 0 ? "expenseIn 0.75s cubic-bezier(0.22, 1, 0.36, 1)" : "none",
   justifyContent: "space-between",
   alignItems: "center",
