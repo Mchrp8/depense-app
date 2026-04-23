@@ -82,6 +82,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState("current");
   const [darkMode, setDarkMode] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [appEntered, setAppEntered] = useState(false);
 const [isExiting, setIsExiting] = useState(false);
   const [amount, setAmount] = useState("");
   const [showSettings, setShowSettings] = useState(false);
@@ -125,7 +126,8 @@ const [selectedColor, setSelectedColor] = useState("#f97316");
 
     setTimeout(() => {
       setIsLoading(false);
-    }, 600); // durée du fade out
+      setAppEntered(true);
+    }, 600);
   }, 2000);
 
   return () => clearTimeout(timer);
@@ -224,6 +226,8 @@ useEffect(() => {
   <div
     style={{
       minHeight: "100vh",
+      animation: "tabFade 0.6s ease",
+      
       background: darkMode
         ? "linear-gradient(180deg, #0f0f12 0%, #18181b 100%)"
         : "linear-gradient(180deg, #f7f2ff 0%, #f5f7fb 45%, #eef2f7 100%)",
@@ -485,6 +489,10 @@ useEffect(() => {
               style={{
                 fontSize: 14,
                 color: darkMode ? "#a1a1aa" : "#6f6f7b",
+                opacity: appEntered ? 1 : 0,
+transform: appEntered ? "translateY(0)" : "translateY(18px)",
+filter: appEntered ? "blur(0)" : "blur(6px)",
+transition: "opacity 0.7s ease, transform 0.7s ease, filter 0.7s ease",
                 marginBottom: 6,
               }}
             >
@@ -987,9 +995,12 @@ onTouchEnd={(e) => {
           </div>
 
           {activeTab === "current" ? (
+            
             <>
               <div
                 style={{
+  //  animation: "tabFade 1s ease",
+   animation: appEntered ? "tabFade 0.7s ease" : "none",
   background:
     "linear-gradient(135deg, #18181f 0%, #26283a 45%, #312e81 100%)",
   borderRadius: 26,
@@ -1583,6 +1594,42 @@ color: darkMode ? "#a1a1aa" : "#7a7f8c",
 >
   Made by Mathou 
 </div>
+return (
+  <div>
+
+    ... ton app ...
+
+    <style>
+      {`
+        @keyframes tabFade {
+          0% {
+            opacity: 0;
+            transform: translateY(25px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}
+    </style>
+        
+  </div>
+);
+<style>
+  {`
+    @keyframes tabFade {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  `}
+</style>
     </div>
   );
 }
