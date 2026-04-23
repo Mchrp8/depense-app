@@ -1370,6 +1370,7 @@ color: darkMode ? "#a1a1aa" : "#7a7f8c",
   }}
   style={{
   display: "flex",
+  animation: "expenseIn 0.35s ease",
   justifyContent: "space-between",
   alignItems: "center",
   background: darkMode ? "rgba(39,39,42,0.95)" : "rgba(255,255,255,0.72)",
@@ -1591,6 +1592,20 @@ color: darkMode ? "#a1a1aa" : "#7a7f8c",
 >
   Made by Mathou 
 </div>
+<style>
+  {`
+    @keyframes expenseIn {
+      0% {
+        opacity: 0;
+        transform: translateY(14px) scale(0.98);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+  `}
+</style>
 
 <style>
   {`
