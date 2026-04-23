@@ -157,7 +157,6 @@ if (isLoading) {
     <div
       style={{
         minHeight: "100vh",
-        
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -380,22 +379,20 @@ if (isLoading) {
 {showSettings && (
   <div
     style={{
-  marginTop: 10,
-  marginBottom: 18,
-  background: darkMode
-    ? "rgba(24,24,27,0.98)"
-    : "rgba(255,255,255,0.96)",
-  backdropFilter: "blur(18px)",
-  WebkitBackdropFilter: "blur(18px)",
-  borderRadius: 24,
-  padding: 16,
-  border: darkMode
-    ? "1px solid rgba(255,255,255,0.08)"
-    : "1px solid rgba(255,255,255,0.8)",
-  boxShadow: darkMode
-    ? "0 24px 60px rgba(0,0,0,0.45)"
-    : "0 24px 60px rgba(31,31,31,0.12)",
-}}
+      marginTop: 12,
+      marginBottom: 18,
+      background: darkMode
+  ? "rgba(24,24,27,0.96)"
+  : "rgba(255,255,255,0.9)",
+      backdropFilter: "blur(12px)",
+      WebkitBackdropFilter: "blur(12px)",
+      borderRadius: 20,
+      padding: 14,
+      border: darkMode
+  ? "1px solid rgba(255,255,255,0.06)"
+  : "1px solid rgba(255,255,255,0.7)",
+      boxShadow: "0 10px 30px rgba(31,31,31,0.08)",
+    }}
   >
     <div
       style={{
