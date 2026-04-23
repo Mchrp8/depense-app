@@ -287,23 +287,26 @@ if (isLoading) {
   const historyMonths = Object.keys(data.history).sort().reverse();
 
   return (
+  <div
+    style={{
+      minHeight: "100vh",
+      background: darkMode
+        ? "linear-gradient(180deg, #0f0f12 0%, #18181b 100%)"
+        : "linear-gradient(180deg, #f7f2ff 0%, #f5f7fb 45%, #eef2f7 100%)",
+      fontFamily:
+        "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    }}
+  >
     <div
       style={{
         minHeight: "100vh",
-        background: darkMode
-  ? "linear-gradient(180deg, #0f0f12 0%, #18181b 100%)"
-  : "linear-gradient(180deg, #f7f2ff 0%, #f5f7fb 45%, #eef2f7 100%)",
-        padding: 16,
-        fontFamily:
-          "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        paddingTop: "calc(env(safe-area-inset-top) + 16px)",
+        paddingBottom: 16,
+        paddingLeft: 16,
+        paddingRight: 16,
+        boxSizing: "border-box",
       }}
     >
-      <div
-        style={{
-          maxWidth: 430,
-          margin: "0 auto",
-        }}
-      >
         <div
           style={{
            background: darkMode
@@ -1410,6 +1413,8 @@ color: darkMode ? "#a1a1aa" : "#7a7f8c",
           )}
         </div>
       </div>
+      
+
       
       <div
   style={{
